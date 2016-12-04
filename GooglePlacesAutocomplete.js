@@ -598,6 +598,8 @@ const GooglePlacesAutocomplete = React.createClass({
           <MKTextField
             { ...userProps }
             ref="textInput"
+            floatingLabelEnabled={true}
+            tintColor={'transparent'} 
             autoFocus={this.props.autoFocus}
             style={[defaultStyles.textInput, this.props.styles.textInput]}
             onChangeText={onChangeText ? text => {this._onChangeText(text); onChangeText(text)} : this._onChangeText}
