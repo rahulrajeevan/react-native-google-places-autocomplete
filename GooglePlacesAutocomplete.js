@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { MKTextField } from 'react-native-material-kit';
 import { TextInput, View, ListView, ScrollView, Image, Text, Dimensions, TouchableHighlight, TouchableWithoutFeedback, Platform, ActivityIndicator, PixelRatio } from 'react-native';
 import Qs from 'qs';
 
@@ -594,7 +595,7 @@ const GooglePlacesAutocomplete = React.createClass({
         <View
           style={[defaultStyles.textInputContainer, this.props.styles.textInputContainer]}
         >
-          <TextInput
+          <MKTextField
             { ...userProps }
             ref="textInput"
             autoFocus={this.props.autoFocus}
