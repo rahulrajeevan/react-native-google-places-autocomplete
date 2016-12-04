@@ -89,6 +89,7 @@ const GooglePlacesAutocomplete = React.createClass({
     enableEmptySections: React.PropTypes.bool,
     renderDescription: React.PropTypes.func,
     renderRow: React.PropTypes.func,
+    highlightColor:React.PropTypes.string
   },
 
   getDefaultProps() {
@@ -124,7 +125,8 @@ const GooglePlacesAutocomplete = React.createClass({
       filterReverseGeocodingByTypes: [],
       predefinedPlacesAlwaysVisible: false,
       enableEmptySections: true,
-      listViewDisplayed: 'auto'
+      listViewDisplayed: 'auto',
+      highlightColor:"#FFF"
     };
   },
 
@@ -599,7 +601,8 @@ const GooglePlacesAutocomplete = React.createClass({
             { ...userProps }
             ref="textInput"
             floatingLabelEnabled={true}
-            underlineEnabled={false} 
+            underlineEnabled={false}
+            highlightColor={this.props.highlightColor}
             tintColor={'transparent'} 
             autoFocus={this.props.autoFocus}
             textInputStyle={[defaultStyles.textInput, this.props.styles.textInput]}
