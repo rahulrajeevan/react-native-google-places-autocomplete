@@ -89,7 +89,8 @@ const GooglePlacesAutocomplete = React.createClass({
     enableEmptySections: React.PropTypes.bool,
     renderDescription: React.PropTypes.func,
     renderRow: React.PropTypes.func,
-    highlightColor:React.PropTypes.string
+    highlightColor:React.PropTypes.string,
+    currentLocationOnPress: React.PropTypes.func
   },
 
   getDefaultProps() {
@@ -101,6 +102,7 @@ const GooglePlacesAutocomplete = React.createClass({
       fetchDetails: false,
       autoFocus: false,
       getDefaultValue: () => '',
+      currentLocationOnPress: () => '',
       timeout: 20000,
       onTimeout: () => console.warn('google places autocomplete: request timeout'),
       query: {
@@ -140,7 +142,7 @@ const GooglePlacesAutocomplete = React.createClass({
     return {
       text: this.props.getDefaultValue(),
       dataSource: ds.cloneWithRows(this.buildRowsFromResults([])),
-      listViewDisplayed: this.props.listViewDisplayed === 'auto' ? false : this.props.listViewDisplayed,
+      listViewDisplayed: this.props.listViewDisplayed === 'auto' ? false : this.props.listViewDisplayed
     };
   },
 
@@ -162,13 +164,13 @@ const GooglePlacesAutocomplete = React.createClass({
     } else {
       res = [];
     }
-
-    res = res.map(function(place) {
-      return {
-        ...place,
-        isPredefinedPlace: true,
-      }
-    });
+  
+      res = res.map(function(place) {
+        return {
+          ...place,
+          isPredefinedPlace: true,
+        }
+      });
 
     return [...res, ...results];
   },
@@ -290,6 +292,7 @@ const GooglePlacesAutocomplete = React.createClass({
           console.warn('google places autocomplete: request could not be completed or has been aborted');
         }
       };
+
       request.open('GET', 'https://maps.googleapis.com/maps/api/place/details/json?' + Qs.stringify({
         key: this.props.query.key,
         placeid: rowData.place_id,
@@ -382,8 +385,10 @@ const GooglePlacesAutocomplete = React.createClass({
               var results = [];
               if (this.props.nearbyPlacesAPI === 'GoogleReverseGeocoding') {
                 results = this._filterResultsByTypes(responseJSON, this.props.filterReverseGeocodingByTypes);
+                 this.props.currentLocationOnPress(latitude, longitude,results);
               } else {
                 results = responseJSON.results;
+                this.props.currentLocationOnPress(latitude, longitude,results);
               }
 
               this.setState({
@@ -414,7 +419,6 @@ const GooglePlacesAutocomplete = React.createClass({
           ...this.props.GooglePlacesSearchQuery,
         });
       }
-
       request.open('GET', url);
       request.send();
     } else {
@@ -456,6 +460,7 @@ const GooglePlacesAutocomplete = React.createClass({
           // console.warn("google places autocomplete: request could not be completed or has been aborted");
         }
       };
+      
       request.open('GET', 'https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=' + encodeURIComponent(text) + '&' + Qs.stringify(this.props.query));
       request.send();
     } else {
@@ -469,7 +474,7 @@ const GooglePlacesAutocomplete = React.createClass({
     this._request(text);
     this.setState({
       text: text,
-      listViewDisplayed: true,
+      listViewDisplayed: true
     });
   },
 
@@ -482,7 +487,7 @@ const GooglePlacesAutocomplete = React.createClass({
     );
   },
 
-  _renderRowData(rowData) {
+    _renderRowData(rowData) {
     if (this.props.renderRow) {
       return this.props.renderRow(rowData);
     }
